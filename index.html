@@ -1,0 +1,194 @@
+function doGet() {
+  var htmlContent = `<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>മഠത്തിൽ ബദർ ജമാഅത്ത് ജിസിസി കമ്മിറ്റി മെമ്പർ രജിസ്ട്രേഷൻ</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #e6f4ea 0%, #f0fdf4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .app-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #d1fae5;
+        }
+        .app-header {
+            background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+            color: #ffffff;
+            padding: 26px 20px;
+            text-align: center;
+        }
+        .app-header h2 { font-size: 19px; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+        .app-header p { font-size: 13px; color: #d1fae5; line-height: 1.5; }
+        .form-body { padding: 24px; }
+        .form-group { margin-bottom: 18px; text-align: left; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #374151; font-size: 13px; }
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 14px;
+            background-color: #f9fafb;
+            color: #1f2937;
+            transition: all 0.2s ease;
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: #059669;
+            outline: none;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.12);
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #4b5563;
+            cursor: pointer;
+            background: #f0fdf4;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px dashed #34d399;
+        }
+        .checkbox-container input { width: 16px; height: 16px; accent-color: #059669; cursor: pointer; }
+        .submit-btn {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            text-align: center;
+        }
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:hover { background: linear-gradient(135deg, #047857 0%, #065f46 100%); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="app-header">
+        <h2>മഠത്തിൽ ബദർ ജമാഅത്ത് ജിസിസി കമ്മിറ്റി മെമ്പർ രജിസ്ട്രേഷൻ</h2>
+        <p>ഗ്രൂപ്പിൽ ചേർക്കുന്നതിന് മുമ്പ് താഴെയുള്ള വിവരങ്ങൾ പൂരിപ്പിക്കുക. (ഏകദേശം 1 മിനിറ്റ് മതി)</p>
+    </div>
+
+    <div class="form-body">
+        <form id="regForm" onsubmit="sendToWhatsApp(event)">
+            <div class="form-group">
+                <label for="fullName">പേര്</label>
+                <input type="text" id="fullName" placeholder="താങ്കളുടെ പൂർണ്ണ പേര്" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fatherName">പിതാവിന്റെ പേര്</label>
+                <input type="text" id="fatherName" placeholder="പിതാവിന്റെ പേര്" required>
+            </div>
+
+            <div class="form-group">
+                <label for="uaeMobile">യുഎഇ മൊബൈൽ നമ്പർ</label>
+                <input type="text" id="uaeMobile" placeholder="ഉദാ: 05XXXXXXXX" required oninput="syncWhatsApp()">
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-container" for="sameMobile">
+                    <input type="checkbox" id="sameMobile" onclick="toggleWpField()">
+                    <span>മൊബൈൽ നമ്പർ തന്നെയാണ് വാട്സ്ആപ്പ് നമ്പർ</span>
+                </label>
+                <input type="text" id="whatsappNumber" placeholder="വാട്സ്ആപ്പ് നമ്പർ" required>
+            </div>
+
+            <div class="form-group">
+                <label for="emirate">ഏത് എമിറേറ്റിൽ ആണ്?</label>
+                <select id="emirate" required>
+                    <option value="" disabled selected>എമിറേറ്റ് തിരഞ്ഞെടുക്കുക</option>
+                    <option value="അബുദാബി (Abu Dhabi)">അബുദാബി (Abu Dhabi)</option>
+                    <option value="ദുബായ് (Dubai)">ദുബായ് (Dubai)</option>
+                    <option value="ഷാർജ (Sharjah)">ഷാർജ (Sharjah)</option>
+                    <option value="അജ്മാൻ (Ajman)">അജ്മാൻ (Ajman)</option>
+                    <option value="ഉമ്മുൽ ഖുവൈൻ (Umm Al Quwain)">ഉമ്മുൽ ഖുവൈൻ (Umm Al Quwain)</option>
+                    <option value="റാസൽഖൈമ (Ras Al Khaimah)">റാസൽഖൈമ (Ras Al Khaimah)</option>
+                    <option value="ഫുജൈറ (Fujairah)">ഫുജൈറ (Fujairah)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="job">ജോലി</label>
+                <input type="text" id="job" placeholder="ഉദാ: ഡ്രൈവർ, സെയിൽസ്മാൻ" required>
+            </div>
+
+            <button type="submit" class="submit-btn">സബ്മിറ്റ് ചെയ്യുക</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function syncWhatsApp() {
+        const chk = document.getElementById('sameMobile');
+        if (chk.checked) {
+            document.getElementById('whatsappNumber').value = document.getElementById('uaeMobile').value;
+        }
+    }
+
+    function toggleWpField() {
+        const chk = document.getElementById('sameMobile');
+        const wpInput = document.getElementById('whatsappNumber');
+        const mobile = document.getElementById('uaeMobile').value;
+        if (chk.checked) {
+            wpInput.value = mobile;
+            wpInput.setAttribute('readonly', true);
+            wpInput.style.backgroundColor = '#f3f4f6';
+        } else {
+            wpInput.value = '';
+            wpInput.removeAttribute('readonly');
+            wpInput.style.backgroundColor = '#f9fafb';
+        }
+    }
+
+    function sendToWhatsApp(e) {
+        e.preventDefault();
+        const name = document.getElementById('fullName').value;
+        const father = document.getElementById('fatherName').value;
+        const mobile = document.getElementById('uaeMobile').value;
+        const wp = document.getElementById('whatsappNumber').value;
+        const emirate = document.getElementById('emirate').value;
+        const job = document.getElementById('job').value;
+
+        const text = \`*മഠത്തിൽ ബദർ ജമാഅത്ത് ജിസിസി കമ്മിറ്റി മെമ്പർ രജിസ്ട്രേഷൻ*%0A%0A\` +
+                     \`👤 *പേര്:* \${name}%0A\` +
+                     `👨‍👦 *പിതാവിന്റെ പേര്:* \${father}%0A\` +
+                     \`📱 *യുഎഇ മൊബൈൽ നമ്പർ:* \${mobile}%0A\` +
+                     `💬 *വാട്സ്ആപ്പ് നമ്പർ:* \${wp}%0A\` +
+                     \`📍 *എമിറേറ്റ്:* \${emirate}%0A\` +
+                     \`💼 *ജോലി:* \${job}\`;
+
+        window.location.href = \`https://wa.me/918304911313?text=\${text}\`;
+    }
+</script>
+</body>
+</html>`;
+  
+  return HtmlService.createHtmlOutput(htmlContent)
+      .setTitle('മഠത്തിൽ ബദർ ജമാഅത്ത് ജിസിസി കമ്മിറ്റി മെമ്പർ രജിസ്ട്രേഷൻ')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
